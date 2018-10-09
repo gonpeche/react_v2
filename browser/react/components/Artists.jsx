@@ -13,7 +13,7 @@ render() {
                 return (
                 <div className="list-group-item" key={artist.id}>
                     {/* Determinaremos donde linkear luego */}
-                    <Link to="">{ artist.name }</Link>   
+                    <Link to={`/artist/${artist.id}`}>{ artist.name }</Link>   
                 </div>
                 )    
             })

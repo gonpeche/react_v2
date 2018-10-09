@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import Albums from '../components/Albums';
 import SingleAlbum from '../components/SingleAlbum';
 import Artists from '../components/Artists'
+import Artist from '../components/Artist'
 import audio from '../audio';
 import {Route, Redirect, Switch}  from 'react-router-dom';
 
@@ -112,10 +113,11 @@ export default class Main extends React.Component {
 
         
         <Switch>
-          <Route path="/albums/:id" render={ ({match}) => <SingleAlbum selectAlbum={this.selectAlbum} albumID={match.params.id} selectedSong={selectedSong} start={this.start} album={selectedAlbum}/>} />
-          <Route path="/albums" render={() => <Albums albums={albums} selectAlbum={this.selectAlbum}/>} />
-          <Route path="/artists" render={() => <Artists artists={this.state.artists}/>} />
-          <Redirect exact from="/" to="/albums"/>
+        <Route path="/albums/:id" render={ ({match}) => <SingleAlbum selectAlbum={this.selectAlbum} albumID={match.params.id} selectedSong={selectedSong} start={this.start} album={selectedAlbum}/>} />
+        <Route path="/albums" render={() => <Albums albums={albums} selectAlbum={this.selectAlbum}/>} />
+        <Route path="/artist/:id" render={() => <Artist/>} />
+        <Route path="/artists" render={() => <Artists artists={this.state.artists}/>} />
+        <Redirect exact from="/" to="/albums"/>
         </Switch>
         
         </div>
