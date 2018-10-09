@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import Albums from '../components/Albums';
 import SingleAlbum from '../components/SingleAlbum';
+import Artists from '../components/Artists'
 import audio from '../audio';
 import {Route, Redirect, Switch}  from 'react-router-dom';
 
@@ -17,6 +18,8 @@ export default class Main extends React.Component {
       isPlaying: false,
       currentSongList: [],
       progress: 0,
+      artists: [],
+      selectedArtist: {}
     };
     this.selectAlbum = this.selectAlbum.bind(this);
     this.deselectAlbum = this.deselectAlbum.bind(this);
@@ -39,6 +42,10 @@ export default class Main extends React.Component {
         progress: 100 * audio.currentTime / audio.duration
       });
     });
+
+    axios.get('/api/artists/')
+    .then( respuesta => this.setState({artists: respuesta.data}))
+
   }
   
   selectAlbum(albumId) {
@@ -107,6 +114,7 @@ export default class Main extends React.Component {
         <Switch>
           <Route path="/albums/:id" render={ ({match}) => <SingleAlbum selectAlbum={this.selectAlbum} albumID={match.params.id} selectedSong={selectedSong} start={this.start} album={selectedAlbum}/>} />
           <Route path="/albums" render={() => <Albums albums={albums} selectAlbum={this.selectAlbum}/>} />
+          <Route path="/artists" render={() => <Artists artists={this.state.artists}/>} />
           <Redirect exact from="/" to="/albums"/>
         </Switch>
         
