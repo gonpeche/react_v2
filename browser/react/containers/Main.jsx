@@ -8,6 +8,7 @@ import Artists from '../components/Artists'
 import Artist from '../components/Artist'
 import audio from '../audio';
 import {Route, Redirect, Switch}  from 'react-router-dom';
+import { O_NONBLOCK } from 'constants';
 
 export default class Main extends React.Component {
   constructor(){
@@ -29,6 +30,7 @@ export default class Main extends React.Component {
     this.pause = this.pause.bind(this);
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
+    this.selectArtist = this.selectArtist.bind(this)
   }
   
   componentDidMount() {
@@ -54,6 +56,26 @@ export default class Main extends React.Component {
       .then(res => res.data)
       .then(serverAlbum => this.setState({ selectedAlbum: serverAlbum }));
   }
+  
+  selectArtist(artistId) {
+    let p2 = axios.get(`/api/albums/${artistId}`).then(res => res.data)
+    let p1 = axios.get(`/api/artists/${artistId}`).then(res => res.data)
+    let p3 = axios.get(`/api/artists/${artistId}/songs`).then(res => res.data)
+
+    Promise.all([p1,p2,p3])
+    .then(respuesta => {
+      this.setState({
+        selectedArtist: {
+          nombre: respuesta[0],
+          album: respuesta[1],
+          songs: respuesta[2],
+        }
+      })
+    })
+
+  }
+    
+  
 
   deselectAlbum() {
     this.setState({ selectedAlbum: {} });
@@ -115,7 +137,7 @@ export default class Main extends React.Component {
         <Switch>
         <Route path="/albums/:id" render={ ({match}) => <SingleAlbum selectAlbum={this.selectAlbum} albumID={match.params.id} selectedSong={selectedSong} start={this.start} album={selectedAlbum}/>} />
         <Route path="/albums" render={() => <Albums albums={albums} selectAlbum={this.selectAlbum}/>} />
-        <Route path="/artist/:id" render={() => <Artist/>} />
+        <Route path="/artist/:id" render={({match}) => <Artist artistId={match.params.id} selectedArtist={this.state.selectedArtist}  selectArtist={this.selectArtist}/>} />
         <Route path="/artists" render={() => <Artists artists={this.state.artists}/>} />
         <Redirect exact from="/" to="/albums"/>
         </Switch>

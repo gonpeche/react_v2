@@ -1,13 +1,22 @@
 import React from 'react';
 
-function Artist (props) {
-    return (
-        <div>
-            <h3>ARTIST NAME</h3>
-            <h4>ALBUMS</h4>
-            <h4>SONGS</h4>
-        </div>
-    )
-}
+class Artist extends React.Component {
 
+    componentDidMount() {
+        this.props.selectArtist(this.props.artistId)
+    }
+    render() {
+        console.log(this.props.selectedArtist)
+        return (
+            <div>
+            <h2>{this.props.selectedArtist.nombre}</h2>
+            <h4>{this.props.selectedArtist.album}</h4>
+            <h4>{this.props.selectedArtist.songs}</h4>
+            </div>
+            
+            )
+        } 
+    }
+
+    
 export default Artist;
